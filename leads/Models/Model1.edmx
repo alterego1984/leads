@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DBLeadsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="clientes">
+          <Key>
+            <PropertyRef Name="cli_id" />
+          </Key>
+          <Property Name="cli_id" Type="int" Nullable="false" />
+          <Property Name="cli_usuario" Type="varchar" MaxLength="50" />
+          <Property Name="cli_password" Type="varchar" MaxLength="50" />
+          <Property Name="cli_token" Type="varchar" MaxLength="100" />
+          <Property Name="cli_tiempo" Type="int" />
+          <Property Name="cli_dominio" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="leads">
+          <Key>
+            <PropertyRef Name="lea_id" />
+          </Key>
+          <Property Name="lea_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="lea_nombre" Type="varchar" MaxLength="500" />
+          <Property Name="lea_correo" Type="varchar" MaxLength="500" />
+          <Property Name="lea_telefono" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="cli_id" Type="int" Nullable="false" />
+          <Property Name="lea_fecha" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_leads_clientes">
+          <End Role="clientes" Type="Self.clientes" Multiplicity="1" />
+          <End Role="leads" Type="Self.leads" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clientes">
+              <PropertyRef Name="cli_id" />
+            </Principal>
+            <Dependent Role="leads">
+              <PropertyRef Name="cli_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBLeadsModelStoreContainer">
+          <EntitySet Name="clientes" EntityType="Self.clientes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="leads" EntityType="Self.leads" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_leads_clientes" Association="Self.FK_leads_clientes">
+            <End Role="clientes" EntitySet="clientes" />
+            <End Role="leads" EntitySet="leads" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBLeadsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="clientes">
+          <Key>
+            <PropertyRef Name="cli_id" />
+          </Key>
+          <Property Name="cli_id" Type="Int32" Nullable="false" />
+          <Property Name="cli_usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="cli_password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="cli_token" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cli_tiempo" Type="Int32" />
+          <Property Name="cli_dominio" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="leads" Relationship="DBLeadsModel.FK_leads_clientes" FromRole="clientes" ToRole="leads" />
+        </EntityType>
+        <EntityContainer Name="DBLeadsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="clientes" EntityType="Self.clientes" />
+          <EntitySet Name="leads" EntityType="DBLeadsModel.leads" />
+          <AssociationSet Name="FK_leads_clientes" Association="DBLeadsModel.FK_leads_clientes">
+            <End Role="clientes" EntitySet="clientes" />
+            <End Role="leads" EntitySet="leads" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="leads">
+          <Key>
+            <PropertyRef Name="lea_id" />
+          </Key>
+          <Property Name="lea_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="lea_nombre" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="lea_correo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="lea_telefono" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="cli_id" Type="Int32" Nullable="false" />
+          <Property Name="lea_fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="clientes" Relationship="DBLeadsModel.FK_leads_clientes" FromRole="leads" ToRole="clientes" />
+        </EntityType>
+        <Association Name="FK_leads_clientes">
+          <End Type="DBLeadsModel.clientes" Role="clientes" Multiplicity="1" />
+          <End Type="DBLeadsModel.leads" Role="leads" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clientes">
+              <PropertyRef Name="cli_id" />
+            </Principal>
+            <Dependent Role="leads">
+              <PropertyRef Name="cli_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBLeadsModelStoreContainer" CdmEntityContainer="DBLeadsEntities">
+          <EntitySetMapping Name="clientes">
+            <EntityTypeMapping TypeName="DBLeadsModel.clientes">
+              <MappingFragment StoreEntitySet="clientes">
+                <ScalarProperty Name="cli_dominio" ColumnName="cli_dominio" />
+                <ScalarProperty Name="cli_tiempo" ColumnName="cli_tiempo" />
+                <ScalarProperty Name="cli_id" ColumnName="cli_id" />
+                <ScalarProperty Name="cli_usuario" ColumnName="cli_usuario" />
+                <ScalarProperty Name="cli_password" ColumnName="cli_password" />
+                <ScalarProperty Name="cli_token" ColumnName="cli_token" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="leads">
+            <EntityTypeMapping TypeName="DBLeadsModel.leads">
+              <MappingFragment StoreEntitySet="leads">
+                <ScalarProperty Name="lea_fecha" ColumnName="lea_fecha" />
+                <ScalarProperty Name="cli_id" ColumnName="cli_id" />
+                <ScalarProperty Name="lea_telefono" ColumnName="lea_telefono" />
+                <ScalarProperty Name="lea_correo" ColumnName="lea_correo" />
+                <ScalarProperty Name="lea_nombre" ColumnName="lea_nombre" />
+                <ScalarProperty Name="lea_id" ColumnName="lea_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
