@@ -20,7 +20,7 @@ namespace leads.Controllers
             return Ok(true);
         }
 
-        //
+        //guardado del lead
         [HttpPost]
         [Route("save")]
         public SaveResponse SaveLead(SaveRequest request)
